@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <title>Real Time Products</title>
+</head>
+<body>
+
+<div>
+    <h1> REAL TIME PRODUCTS  </h1>
+     
+     
+       <form id="product-form">
+		<label for="title">Title:</label>
+		<input type="text" id="title" name="title"><br>
+
+		<label for="description">Description:</label>
+		<input type="text" id="description" name="description"><br>
+
+		<label for="code">Code:</label>
+		<input type="text" id="code" name="code"><br>
+
+		<label for="price">Price:</label>
+		<input type="number" id="price" name="price"><br>
+
+		<label for="stock">Stock:</label>
+		<input type="number" id="stock" name="stock"><br>
+
+		<label for="category">Category:</label>
+		<select id="category" name="category">
+			<option value="electronics">Electronics</option>
+			<option value="clothing">Clothing</option>
+			<option value="books">Books</option>
+		</select><br>
+
+		<button type="submit">Submit</button>
+		</form>
+
+</div>
+
+<ul id="product-list"></ul>
+
+</body>
+</html>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/realTimeProducts.js"></script>
+
+

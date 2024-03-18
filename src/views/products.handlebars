@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRODUCTOS</title>
+    <style>
+
+    .product-card {
+      display: flex;
+      flex-direction: column;
+      width: 200px;
+      height: 300px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      margin: 10px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      margin-bottom: 10px;
+    }
+
+    .product-title {
+      margin: 0;
+      font-size: 1.2em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .product-price {
+      margin: 0;
+      font-size: 1em;
+      color: #444;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+    {{#if isValid}}
+<div>
+    {{#each docs}}
+    <div class="product-card">
+        <div class="product-image">
+            <img src="{{this.imageUrl}}" alt="Imagen de producto">
+        </div>
+        <div>
+        <p class="product-title">{{this.name}}</p>
+        <p>{{this.description}}</p>
+        
+        <td>{{this.price}}</td>
+        <p>{{this.stock}}</p>
+        <p>{{this.category}}</p>
+        </div>
+
+        <p>Grupo: {{this.group}} &nbsp; Calificación: {{this.grade}}</p>
+    </div>
+    <br />
+    {{/each}}
+</div>
+<br />
+
+<div>
+    {{#if hasPrevPage}}
+    <a href={{this.prevLink}}>
+        << Anterior </a>
+            {{/if}}
+
+            {{!-- numero de pagina --}}
+            &nbsp;
+            {{this.page}}
+            &nbsp;
+
+            {{#if hasNextPage}}
+            <a href={{this.nextLink}}>
+                Siguiente >> </a>
+            {{/if}}
+
+</div>
+{{else}}
+<h1>No hay mas productos para mostrar</h1>
+{{/if}}
+</body>
+</html>
+
