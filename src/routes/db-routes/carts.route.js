@@ -14,10 +14,11 @@ CartRouter.get("/", async (req, res) => {
 
 // GET /api/carts/:cid
 CartRouter.get("/:cid", async (req, res) => {
-    try {
-        const cid = req.params.cid;
+    const { cid }= req.params;
+  try {
         const cart = await cartsService.getCartById(cid);
-        res.send({ status: "success", payload: cart });
+        const populatedCart = await cart.populate("products.product").execPopulate();
+        res.send({ status: "success", payload: populatedCart});
     } catch (error) {
         console.log(error);
         res.status(500).send({ status: "error",  error: error.message});
