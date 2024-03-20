@@ -6,11 +6,12 @@ import { productModels } from "../../model/mongo-models/products.js";
 const ProductRouter = Router()
 const productsService = new ProductsService();
 
-ProductRouter.get('/products', async (req, res) => {
+ProductRouter.get('/productos', async (req, res) => {
+  let limit = parseInt(req.query.limit) || 10;
   let page = parseInt(req.query.page);
-  if (!page) page = 2
-  let result = await productModels.paginate({}, { page, limit: 3, lean: true })
-  console.log(result);
+  if (!page) page = 1
+  let result = await productModels.paginate({}, { page: page, limit: limit, lean: true })
+  console.log('Resultado de la consulta:', result);
 
   result.prevLink = result.hasPrevPage ? `http://localhost:8080/products?page=${result.prevPage}` : '';
   result.nextLink = result.hasNextPage ? `http://localhost:8080/products?page=${result.nextPage}` : '';
@@ -25,7 +26,7 @@ ProductRouter.get('/products', async (req, res) => {
 ProductRouter.get('/', async (req, res) => {
   const { limit } = req.query;
   try {
-    const products = await productModels.getAllProducts(parseInt(limit));
+    const products = await productsService.getAllProducts(parseInt(limit));
     res.status(200).send({ status: "success", payload: products });
   } catch (error) {
     console.log(error);

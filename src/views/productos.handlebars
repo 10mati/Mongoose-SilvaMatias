@@ -46,19 +46,15 @@
 <div>
     {{#each docs}}
     <div class="product-card">
-        <div class="product-image">
-            <img src="{{this.imageUrl}}" alt="Imagen de producto">
-        </div>
+        
         <div>
-        <p class="product-title">{{this.name}}</p>
+        <p class="product-title">{{this.title}}</p>
         <p>{{this.description}}</p>
         
-        <td>{{this.price}}</td>
+        <p>{{this.price}}</p>
         <p>{{this.stock}}</p>
         <p>{{this.category}}</p>
         </div>
-
-        <p>Grupo: {{this.group}} &nbsp; Calificación: {{this.grade}}</p>
     </div>
     <br />
     {{/each}}

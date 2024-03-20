@@ -26,6 +26,65 @@ class CartsService {
 
         return await cart.save();
     }
+
+    async deleteAllProductsFromCart(cartId) {
+        const cart = await this.cartsModel.findById(cartId);
+      
+        if (!cart) {
+          throw new Error("Carrito no encontrado");
+        }
+      
+        cart.products = [];
+      
+        return await cart.save();
+      }
+
+    async deleteProductCart(cartId, productId) {
+        const cart = await this.cartsModel.findById(cartId);
+        const productIndex = cart.products.findIndex((product) => product.product.toString() === productId);
+      
+        if (productIndex === -1) {
+          throw new Error('Producto no encontrado en el carrito');
+        }
+      
+        cart.products.splice(productIndex, 1);
+      
+        return await cart.save();
+      }
+
+      async updateCartProducts(cartId, products) {
+        const cart = await this.cartsModel.findById(cartId);
+      
+        if (!cart) {
+          throw new Error("Carrito no encontrado");
+        }
+      
+        cart.products = products;
+      
+        return await cart.save();
+      }
+
+      async updateProductQuantity(cartId, productId, quantity) {
+        const cart = await this.cartsModel.findById(cartId);
+      
+        if (!cart) {
+          throw new Error("Carrito no encontrado");
+        }
+      
+        const productIndex = cart.products.findIndex(
+          (product) => product.product.toString() === productId
+        );
+      
+        if (productIndex === -1) {
+          throw new Error("Producto no encontrado en el carrito");
+        }
+      
+        cart.products[productIndex].quantity = quantity;
+      
+        return await cart.save();
+      }
+
+
     async getAllCarts() {
         return await this.cartsModel.find({});
       }

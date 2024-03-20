@@ -1,5 +1,6 @@
 import express from 'express';
 
+
 const router = express.Router();
 
 router.get('/', (req, res) =>{
@@ -12,6 +13,10 @@ router.get('/realTimeProducts', (req, res) =>{
 
 router.get('/products', (req, res) =>{
     res.render('products')
+})
+
+router.get('/productos', (req, res) =>{
+    res.render('productos', {})
 })
 
 router.get("/chat", (req, res) => {

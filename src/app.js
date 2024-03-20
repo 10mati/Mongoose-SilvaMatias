@@ -31,6 +31,7 @@ app.use("/", viewRouter)
 app.use("/realTimeProducts", viewRouter)
 app.use("/api/products", ProductRouter)
 app.use("/api/carts", CartsRouter)
+app.use("/api/productos", ProductRouter)
 
 const httpServer = app.listen(PORT, () => {
     console.log(`Servidor con express Puerto ${PORT}`);
