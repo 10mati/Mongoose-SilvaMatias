@@ -1,0 +1,11 @@
+<h1>Carrito {{cart._id}}</h1>
+<ul id="products-list"></ul>
+
+<script>
+  const productsList = document.getElementById("products-list");
+  {{#each cart.products}}
+    const li = document.createElement("li");
+    li.textContent = `Producto: ${this.product}, Cantidad: ${this.quantity}`;
+    productsList.appendChild(li);
+  {{/each}}
+</script>

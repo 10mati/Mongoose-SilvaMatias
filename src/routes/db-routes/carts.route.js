@@ -14,15 +14,19 @@ CartRouter.get("/", async (req, res) => {
 
 // GET /api/carts/:cid
 CartRouter.get("/:cid", async (req, res) => {
-    const { cid }= req.params;
+  const { cid } = req.params;
   try {
-        const cart = await cartsService.getCartById(cid);
-        const populatedCart = await cart.populate("products.product").execPopulate();
-        res.send({ status: "success", payload: populatedCart});
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({ status: "error",  error: error.message});
+    const cart = await cartsService.getCartById(cid);
+    if (!cart) {
+      return res.status(404).send({ status: "error", error: "Carrito no encontrado" });
     }
+    cart.populate("products.product").then(() => {
+      res.send({ status: "success", payload: cart });
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ status: "error", error: error.message });
+  }
 });
 
 // POST /api/carts
@@ -96,5 +100,7 @@ CartRouter.put("/:cid/products", async (req, res) => {
     }
   });
 
+
+  
 
 export default CartRouter;

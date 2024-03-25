@@ -2,13 +2,17 @@ import express from "express";
 import handlebars from 'express-handlebars';
 import __dirname from './utils.js'
 import { Server } from "socket.io";
+import session from "express-session";
 import productRouter  from "./routes/file-routes/products.route.js";
 import cartRouter  from "./routes/file-routes/carts.route.js";
 import viewRouter from "./routes/views.routes.js"
+import MongoStore from 'connect-mongo';
 import mongoose from "mongoose";
 import { messageModels } from "./model/mongo-models/messaje.js";
 import ProductRouter from "./routes/db-routes/products.route.js";
 import CartsRouter from "./routes/db-routes/carts.route.js"
+import userViewsRouter from "./routes/user.views.js"
+import sessionsRouter from "./routes/sessions.routes.js"
 
 
 const app = express();
@@ -24,6 +28,7 @@ app.set('views', __dirname + "/views");
 app.set('view engine', 'handlebars')
 
 app.use(express.static(__dirname + "/Public"))
+ 
 
 app.use("/fs/products", productRouter)
 app.use("/fs/carts", cartRouter)
@@ -32,6 +37,32 @@ app.use("/realTimeProducts", viewRouter)
 app.use("/api/products", ProductRouter)
 app.use("/api/carts", CartsRouter)
 app.use("/api/productos", ProductRouter)
+app.use("/carrito", CartsRouter)
+app.use("/users", userViewsRouter);
+app.use("/api/sessions", sessionsRouter);
+
+
+app.use(session({
+  store: MongoStore.create({
+    mongoUrl: 'mongodb+srv://silvamatias07:J5DdC6lnaBueAeW7@cluster0.6vafnod.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=Cluster0',
+    mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
+    ttl: 10 * 60
+}),
+  secret: 'coderS3cr3t',
+  resave: false,
+  saveUninitialized: true, 
+  cookie: { maxAge: 80000 }
+}))
+app.get('/session', (req, res) => {
+
+  if (req.session.counter) { 
+      req.session.counter ++
+      res.send(`Se ha visitado este sitio ${req.session.counter} veces.`);
+  } else {
+      req.session.counter = 1;
+      res.send("Bienvenido!")
+  }
+});
 
 const httpServer = app.listen(PORT, () => {
     console.log(`Servidor con express Puerto ${PORT}`);

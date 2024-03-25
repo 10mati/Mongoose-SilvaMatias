@@ -13,12 +13,12 @@ ProductRouter.get('/productos', async (req, res) => {
   let result = await productModels.paginate({}, { page: page, limit: limit, lean: true })
   console.log('Resultado de la consulta:', result);
 
-  result.prevLink = result.hasPrevPage ? `http://localhost:8080/products?page=${result.prevPage}` : '';
-  result.nextLink = result.hasNextPage ? `http://localhost:8080/products?page=${result.nextPage}` : '';
+  result.prevLink = result.hasPrevPage ? `http://localhost:8080/productos?page=${result.prevPage}` : '';
+  result.nextLink = result.hasNextPage ? `http://localhost:8080/productos?page=${result.nextPage}` : '';
 
   result.isValid = !(page < 1 || page > result.totalPages)
 
-  res.render("products", result)
+  res.render("productos", result)
 })
 
 
