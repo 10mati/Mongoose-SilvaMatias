@@ -1,4 +1,13 @@
 <div>
+  {{#if user}}
+    <div>
+        <h2>Información del Usuario</h2>
+        <p>Nombre: {{user.name}}</p>
+        <p>Email: {{user.email}}</p>
+        <!-- Agrega más campos según lo necesites -->
+    </div>
+    {{/if}}
+    
     <h1> TODO LISTO PARA TRABAJAR CON WEBSOCKETS </h1>
      <table>
   <thead>

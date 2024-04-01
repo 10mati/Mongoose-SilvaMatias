@@ -13,6 +13,7 @@ form.addEventListener('submit', e => {
         }
     }).then(result => {
         if (result.status === 200) {
+            result.json();
             window.location.replace('/users/login')
         }
     })

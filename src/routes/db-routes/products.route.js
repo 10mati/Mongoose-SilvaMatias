@@ -6,15 +6,15 @@ import { productModels } from "../../model/mongo-models/products.js";
 const ProductRouter = Router()
 const productsService = new ProductsService();
 
-ProductRouter.get('/productos', async (req, res) => {
+ProductRouter.get('/', async (req, res) => {
   let limit = parseInt(req.query.limit) || 10;
   let page = parseInt(req.query.page);
   if (!page) page = 1
   let result = await productModels.paginate({}, { page: page, limit: limit, lean: true })
   console.log('Resultado de la consulta:', result);
 
-  result.prevLink = result.hasPrevPage ? `http://localhost:8080/productos?page=${result.prevPage}` : '';
-  result.nextLink = result.hasNextPage ? `http://localhost:8080/productos?page=${result.nextPage}` : '';
+  result.prevLink = result.hasPrevPage ? `http://localhost:8080/api/productos?page=${result.prevPage}` : '';
+  result.nextLink = result.hasNextPage ? `http://localhost:8080/api/productos?page=${result.nextPage}` : '';
 
   result.isValid = !(page < 1 || page > result.totalPages)
 

@@ -49,15 +49,9 @@ router.get('/deletecookie', (req, res) => {
 
 
 /*router.get('/session', (req, res) => {
-    console.log("Entrando en la ruta /session");
-    if (!req.session) {
-        req.session = {};
-        console.log("Inicializando req.session");
-    }
+    
     if (req.session.counter) {
-        console.log("Antes de incrementar contador");
         req.session.counter ++
-        console.log("Incrementando contador");
         res.send(`Se ha visitado este sitio ${req.session.counter} veces.`);
     } else {
         req.session.counter = 1;

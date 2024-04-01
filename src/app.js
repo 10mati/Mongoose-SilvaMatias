@@ -10,9 +10,11 @@ import MongoStore from 'connect-mongo';
 import mongoose from "mongoose";
 import { messageModels } from "./model/mongo-models/messaje.js";
 import ProductRouter from "./routes/db-routes/products.route.js";
-import CartsRouter from "./routes/db-routes/carts.route.js"
-import userViewsRouter from "./routes/user.views.js"
-import sessionsRouter from "./routes/sessions.routes.js"
+import CartsRouter from "./routes/db-routes/carts.route.js";
+import userViewsRouter from "./routes/user.views.routes.js";
+import sessionsRouter from "./routes/sessions.routes.js";
+import passport from 'passport';
+import initializePassport from "./config/passport.config.js";
 
 
 const app = express();
@@ -28,19 +30,6 @@ app.set('views', __dirname + "/views");
 app.set('view engine', 'handlebars')
 
 app.use(express.static(__dirname + "/Public"))
- 
-
-app.use("/fs/products", productRouter)
-app.use("/fs/carts", cartRouter)
-app.use("/", viewRouter)
-app.use("/realTimeProducts", viewRouter)
-app.use("/api/products", ProductRouter)
-app.use("/api/carts", CartsRouter)
-app.use("/api/productos", ProductRouter)
-app.use("/carrito", CartsRouter)
-app.use("/users", userViewsRouter);
-app.use("/api/sessions", sessionsRouter);
-
 
 app.use(session({
   store: MongoStore.create({
@@ -53,7 +42,30 @@ app.use(session({
   saveUninitialized: true, 
   cookie: { maxAge: 80000 }
 }))
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
+ 
+
+app.use("/fs/products", productRouter)
+app.use("/fs/carts", cartRouter)
+app.use("/", viewRouter)
+app.use("/realTimeProducts", viewRouter)
+//app.use("/api/products", ProductRouter)
+app.use("/api/carts", CartsRouter)
+app.use("/api/productos", ProductRouter)
+app.use("/carrito", CartsRouter)
+app.use("/users", userViewsRouter);
+app.use("/api/sessions", sessionsRouter);
+
+
+
+
 app.get('/session', (req, res) => {
+  if (!req.session) {
+    req.session = {};
+  }
 
   if (req.session.counter) { 
       req.session.counter ++
