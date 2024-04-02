@@ -11,11 +11,14 @@ router.get("/register", (req, res) => {
     res.render('register')
 });
 
-// Cuaando ya tenemos una session activa con los datos del user, renderizamos la vista profile
 router.get("/", (req, res) => {
     res.render('profile', {
         user: req.session.user
     })
+});
+
+router.get("/error", (req, res) => {
+    res.render("error");
 });
 
 export default router;

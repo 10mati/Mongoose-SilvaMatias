@@ -2,11 +2,48 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import userModel from '../model/mongo-models/user.model.js';
 import { createHash, isValidPassword } from '../utils.js';
+import GitHubStrategy from 'passport-github2';
 
 
 const localStrategy = passportLocal.Strategy;
 
 const initializePassport = () => {
+
+
+    passport.use('github', new GitHubStrategy(
+        {
+            clientID: ' Iv1.5d95f066cbbcdf1c',
+            clientSecret: 'a184bfc51911813d28d12d8f84abf00d799f865f',
+            callbackUrl: 'http://localhost:8080/api/sessions/githubcallback'
+        }, async (accessToken, refreshToken, profile, done) => {
+            console.log("Profile obtenido del usuario:");
+            console.log(profile);
+            try {
+                const user = await userModel.findOne({ email: profile._json.email });
+                console.log("Usuario encontrado para login:");
+                console.log(user);
+
+                if (!user) {
+                    console.warn("User doesn't exists with username: " + profile._json.email);
+
+                    let newUser = {
+                        first_name: profile._json.name,
+                        last_name: '',
+                        age: 25,
+                        email: profile._json.email,
+                        password: '',
+                        loggedBy: 'GitHub'
+                    }
+                    const result = await userModel.create(newUser)
+                    return done(null, result)
+                } else {
+                    return done(null, user)
+                }
+            } catch (error) {
+                return done(error)
+            }
+        }
+    ))
 
 
     passport.use('register', new localStrategy(
@@ -57,11 +94,7 @@ const initializePassport = () => {
                     console.warn("Invalid credentials for user: " + username);
                     return done(null, false)
                 }
-                // req.session.user = {
-                //     name: `${user.first_name} ${user.last_name}`,
-                //     email: user.email,
-                //     age: user.age
-                // }
+            
 
                 return done(null, user)
             } catch (error) {

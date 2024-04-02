@@ -15,7 +15,7 @@ import userViewsRouter from "./routes/user.views.routes.js";
 import sessionsRouter from "./routes/sessions.routes.js";
 import passport from 'passport';
 import initializePassport from "./config/passport.config.js";
-
+import githubLoginViewRouter from './routes/github-login.views.router.js'
 
 const app = express();
 const PORT = 8080
@@ -58,6 +58,8 @@ app.use("/api/productos", ProductRouter)
 app.use("/carrito", CartsRouter)
 app.use("/users", userViewsRouter);
 app.use("/api/sessions", sessionsRouter);
+app.use("/github", githubLoginViewRouter);
+
 
 
 
