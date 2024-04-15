@@ -1,4 +1,5 @@
 import express from "express";
+import { passportCall, authorization } from "../utils.js";
 
 
 const router = express.Router();
@@ -12,8 +13,10 @@ router.get("/register", (req, res) => {
 });
 
 router.get("/", (req, res) => {
+    passportCall('jwt'), 
+    authorization('user'),
     res.render('profile', {
-        user: req.session.user
+        user: req.user
     })
 });
 

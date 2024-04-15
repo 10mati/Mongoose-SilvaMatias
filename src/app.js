@@ -15,7 +15,13 @@ import userViewsRouter from "./routes/user.views.routes.js";
 import sessionsRouter from "./routes/sessions.routes.js";
 import passport from 'passport';
 import initializePassport from "./config/passport.config.js";
-import githubLoginViewRouter from './routes/github-login.views.router.js'
+import githubLoginViewRouter from './routes/github-login.views.router.js';
+import cookieParser from 'cookie-parser';
+import jwtRouter from './routes/jwt.routes.js';
+import usersRouter from './routes/user.routes.js';
+import usersViewRouter from './routes/user.views.routes.js';
+import usersExtendRouter from './routes/custom/users.extend.router.js';
+
 
 const app = express();
 const PORT = 8080
@@ -30,6 +36,7 @@ app.set('views', __dirname + "/views");
 app.set('view engine', 'handlebars')
 
 app.use(express.static(__dirname + "/Public"))
+app.use(cookieParser("CoderS3cr3tC0d3"));
 
 app.use(session({
   store: MongoStore.create({
@@ -59,6 +66,10 @@ app.use("/carrito", CartsRouter)
 app.use("/users", userViewsRouter);
 app.use("/api/sessions", sessionsRouter);
 app.use("/github", githubLoginViewRouter);
+app.use("/users", usersViewRouter);
+app.use("/api/jwt", jwtRouter);
+app.use('/api/users', usersRouter);
+app.use("/api/extend/users", usersExtendRouter.getRouter());
 
 
 

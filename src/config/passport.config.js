@@ -2,18 +2,23 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import userModel from '../model/mongo-models/user.model.js';
 import { createHash, isValidPassword } from '../utils.js';
+import jwtStrategy from 'passport-jwt';
+import { PRIVATE_KEY } from '../utils.js';
 import GitHubStrategy from 'passport-github2';
 
 
 const localStrategy = passportLocal.Strategy;
+const JwtStrategy = jwtStrategy.Strategy;
+const ExtractJWT = jwtStrategy.ExtractJwt;
+
 
 const initializePassport = () => {
 
 
     passport.use('github', new GitHubStrategy(
         {
-            clientID: ' Iv1.5d95f066cbbcdf1c',
-            clientSecret: 'a184bfc51911813d28d12d8f84abf00d799f865f',
+            clientID: ' Iv1.dec6059d501f5422',
+            clientSecret: 'b2acdd43ead28512df22faf730ff4c1ad670f921',
             callbackUrl: 'http://localhost:8080/api/sessions/githubcallback'
         }, async (accessToken, refreshToken, profile, done) => {
             console.log("Profile obtenido del usuario:");
@@ -89,7 +94,7 @@ const initializePassport = () => {
                     return done(null, false)
                 }
 
-                // Validamos usando Bycrypt credenciales del usuario
+                
                 if (!isValidPassword(user, password)) {
                     console.warn("Invalid credentials for user: " + username);
                     return done(null, false)
@@ -103,6 +108,36 @@ const initializePassport = () => {
         }
     ))
 
+
+    passport.use('jwt', new JwtStrategy(
+        {
+            jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), 
+            secretOrKey: PRIVATE_KEY
+        }, async (jwt_payload, done) => {
+            console.log("Entrando a passport Strategy con JWT.");
+            try {
+                console.log("JWT obtenido del payload");
+                console.log(jwt_payload);
+                return done(null, jwt_payload.user);
+            } catch (error) {
+                console.error(error);
+                return done(error);
+            }
+        }
+    ));
+
+    const cookieExtractor = req => {
+        let token = null;
+        console.log("Entrando a Cookie Extractor");
+        if (req && req.cookies) { //Validamos que exista el request y las cookies.
+            console.log("Cookies presentes: ");
+            console.log(req.cookies);
+            token = req.cookies['jwtCookieToken'];
+            console.log("Token obtenido desde Cookie:");
+            console.log(token);
+        }
+        return token;
+    };
 
 
     passport.serializeUser((user, done) => {
